@@ -64,12 +64,12 @@ pipeline {
             }
         }
         stage('Wait and Test') {
-      steps {
-        script {
-          bat 'sleep 10'
-          bat 'curl -f http://localhost:8080 || echo "App did not start properly"'
+        steps {
+            script {
+            bat 'timeout /t 10 >nul'
+            bat 'curl -f http://localhost:8080 || echo "App did not start properly"'
+            }
         }
-      }
     }
     
     stage('Docker Compose Down') {
