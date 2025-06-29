@@ -75,13 +75,13 @@ pipeline {
         }
     }
     
-    stage('Docker Compose Down') {
-      steps {
-        script {
-          bat 'docker-compose down'
-        }
-      }
-    }
+    // stage('Docker Compose Down') {
+    //   steps {
+    //     script {
+    //       bat 'docker-compose down'
+    //     }
+    //   }
+    // }
     }
     post{
         success {
