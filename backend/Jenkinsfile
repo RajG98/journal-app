@@ -33,36 +33,52 @@ pipeline {
 
             }
         }
-        stage('Deploy'){
+        stage('Copy to DEV') {
+            steps {
+                dir('backend'){
+                    bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
+                }
+            }
+        }
+        stage('Stop Tomcat'){
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
+                    bat "sc stop Tomcat11-DEV"
+                }
+            }
+        }
+        stage('Start Tomcat') {
+            steps {
+                
+                bat "sc start Tomcat11-DEV"
+            }
+        }
+        stage('Approve for QA'){
+            steps{
+                input message:'Approve build to QA?'
+            }
+        }
+        stage('Deploy to QA on Docker'){
             steps{
                 bat "docker-compose up -d --build"
             }
         }
-        // stage('Copy to DEV') {
-        //     steps {
-        //         dir('backend'){
-        //             bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
-        //         }
-        //     }
-        // }
-        // stage('Stop Tomcat'){
-        //     steps{
-        //         catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
-        //             bat "sc stop Tomcat11-DEV"
-        //         }
-        //     }
-        // }
-        // stage('Start Tomcat') {
-        //     steps {
-                
-        //         bat "sc start Tomcat11-DEV"
-        //     }
-        // }
-        // stage('Approve for QA'){
-        //     steps{
-        //         input message:'Approve build to QA?'
-        //     }
-        // }
+        stage('Wait and Test') {
+      steps {
+        script {
+          bat 'sleep 10'
+          bat 'curl -f http://localhost:8080 || echo "App did not start properly"'
+        }
+      }
+    }
+    
+    stage('Docker Compose Down') {
+      steps {
+        script {
+          bat 'docker-compose down'
+        }
+      }
+    }
     }
     post{
         success {
