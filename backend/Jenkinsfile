@@ -33,31 +33,36 @@ pipeline {
 
             }
         }
-        stage('Copy to DEV') {
-            steps {
-                dir('backend'){
-                    bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
-                }
-            }
-        }
-        stage('Stop Tomcat'){
+        stage('Deploy'){
             steps{
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
-                    bat "sc stop Tomcat11-DEV"
-                }
+                bat "docker-compose up --build"
             }
         }
-        stage('Start Tomcat') {
-            steps {
+        // stage('Copy to DEV') {
+        //     steps {
+        //         dir('backend'){
+        //             bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
+        //         }
+        //     }
+        // }
+        // stage('Stop Tomcat'){
+        //     steps{
+        //         catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
+        //             bat "sc stop Tomcat11-DEV"
+        //         }
+        //     }
+        // }
+        // stage('Start Tomcat') {
+        //     steps {
                 
-                bat "sc start Tomcat11-DEV"
-            }
-        }
-        stage('Approve for QA'){
-            steps{
-                input message:'Approve build to QA?'
-            }
-        }
+        //         bat "sc start Tomcat11-DEV"
+        //     }
+        // }
+        // stage('Approve for QA'){
+        //     steps{
+        //         input message:'Approve build to QA?'
+        //     }
+        // }
     }
     post{
         success {
