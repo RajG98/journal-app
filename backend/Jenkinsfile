@@ -53,6 +53,11 @@ pipeline {
                 bat "sc start Tomcat11-DEV"
             }
         }
+        stage('Approve for QA'){
+            steps{
+                input message:'Approve build to QA?'
+            }
+        }
     }
     post{
         success {
