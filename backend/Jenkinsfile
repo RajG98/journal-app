@@ -5,11 +5,22 @@ pipeline {
         TARGET_DIR_FOR_DEV="C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-DEV\\webapps"
         TARGET_DIR_FOR_QA='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-QA\\webapps'
     }
+    parameters {
+        string(name: 'GIT_CREDENTIALS_ID', defaultValue: 'github-token', description: 'Jenkins GitHub credentials ID')
+    }
 
     stages {
         stage('Clone'){
             steps{
-                git 'https://github.com/RajG98/journal-app.git'
+                checkout scmGit(
+                    branches: [[name: '*/main']], // or your desired branch, e.g., '*/master'
+                    extensions: [],
+                    userRemoteConfigs: [[
+                        credentialsId: "${params.GIT_CREDENTIALS_ID}", // ID of your Jenkins credentials
+                        url: 'https://github.com/RajG98/journal-app.git' // Replace with your repository URL
+                    ]]
+                )
+                
             }
         }
         stage('Build') {
