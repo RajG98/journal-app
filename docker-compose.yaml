@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   tomcat:
-    build: .
+    build:
+      context: ./backend
     ports:
       - "9090:8080"
