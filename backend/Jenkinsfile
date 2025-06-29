@@ -34,7 +34,7 @@ pipeline {
         }
         stage('Copy to DEV') {
             steps {
-                bat "xcopy target\\*.jar ${TARGET_DIR_FOR_DEV}"
+                bat "xcopy target\\*.war ${TARGET_DIR_FOR_DEV}"
             }
         }
         stage('Deploy') {
