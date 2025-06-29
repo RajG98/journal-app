@@ -14,6 +14,7 @@ pipeline {
         }
         stage('Build') {
             steps {
+                bat 'cd backend'
                 bat "mvn clean package"
                 
 
