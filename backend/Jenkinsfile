@@ -40,10 +40,16 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Stop Tomcat'){
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
+                    bat "sc stop Tomcat11-DEV"
+                }
+            }
+        }
+        stage('Start Tomcat') {
             steps {
-                bat "sc stop Tomcat11-DEV"
-                bat "ping -n 11 127.0.0.1 >nul"
+                
                 bat "sc start Tomcat11-DEV"
             }
         }
