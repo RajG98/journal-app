@@ -44,6 +44,7 @@ pipeline {
             steps{
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
                     bat "sc stop Tomcat11-DEV"
+                    bat 'timeout /t 10 >nul'
                 }
             }
         }
