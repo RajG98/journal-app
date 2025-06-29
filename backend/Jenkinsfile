@@ -44,7 +44,7 @@ pipeline {
             steps{
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
                     bat "sc stop Tomcat11-DEV"
-                    bat 'timeout /t 10 >nul'
+                    bat 'waitfor SomethingThatIsNeverHappening /t 10 2>NUL'
                 }
             }
         }
@@ -69,7 +69,7 @@ pipeline {
         stage('Wait and Test') {
         steps {
             script {
-            bat 'timeout /t 10 >nul'
+            bat 'waitfor SomethingThatIsNeverHappening /t 10 2>NUL'
             bat 'curl -f http://localhost:8080 || echo "App did not start properly"'
             }
         }
