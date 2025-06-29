@@ -2,8 +2,9 @@ pipeline {
     agent any
     
     environment{
-        TARGET_DIR_FOR_DEV="C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-DEV\\webapps"
+        TARGET_DIR_FOR_DEV='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-DEV\\webapps'
         TARGET_DIR_FOR_QA='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-QA\\webapps'
+        WAR_NAME='journal.war'
     }
     parameters {
         string(name: 'GIT_CREDENTIALS_ID', defaultValue: 'github-token', description: 'Jenkins GitHub credentials ID')
@@ -34,7 +35,7 @@ pipeline {
         }
         stage('Copy to DEV') {
             steps {
-                bat "xcopy target\\*.war ${TARGET_DIR_FOR_DEV}"
+                bat "xcopy target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
             }
         }
         stage('Deploy') {
