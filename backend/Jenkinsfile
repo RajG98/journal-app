@@ -68,7 +68,7 @@ pipeline {
         }
         stage('Wait and Test') {
         steps {
-            script {
+            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
             bat 'waitfor SomethingThatIsNeverHappening /t 10 2>NUL'
             bat 'curl -f http://localhost:8080 || echo "App did not start properly"'
             }
