@@ -35,7 +35,9 @@ pipeline {
         }
         stage('Copy to DEV') {
             steps {
-                bat "xcopy target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
+                dir('backend'){
+                    bat "xcopy target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
+                }
             }
         }
         stage('Deploy') {
