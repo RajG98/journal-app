@@ -7,4 +7,4 @@ services:
     environment:
       - JAVA_OPTS=-Xms512m -Xmx1024m -Dspring.profiles.active=qa
     ports:
-      - "9090:8080"
+      - "8083:8080"
