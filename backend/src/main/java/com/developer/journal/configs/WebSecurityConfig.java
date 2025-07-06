@@ -33,6 +33,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
+                .cors(cors->cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf-> csrf
                         .disable())
                 .authorizeHttpRequests(requests-> requests
@@ -66,7 +67,7 @@ public class WebSecurityConfig {
         CorsConfiguration corsConfiguration= new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
         corsConfiguration.setAllowedMethods(List.of("GET","POST","PUT","OPTIONS","DELETE"));
-        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "X-XSRF-TOKEN"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",corsConfiguration);

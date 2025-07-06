@@ -6,9 +6,10 @@ import api from "../../../api";
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-  const handleLogin = async (e: React.FormEvent) => {
+	const handleLogin = async (e: React.FormEvent) => {
+		e.preventDefault();
     if (email && password) {
-      const response = await api.post("/login", { email, password });
+      const response = await api.post("auth/login", { email, password });
       console.log(response);
 		} else {
 			alert("Please fill all your details!");

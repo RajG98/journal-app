@@ -8,7 +8,8 @@ export default function SignupPage() {
 	const [password, setPassword] = useState("");
 	const [name, setName] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-    const handleSignup = async (e: React.FormEvent) => {
+	const handleSignup = async (e: React.FormEvent) => {
+		e.preventDefault();
         if (confirmPassword && password === confirmPassword) {
             const response=await api.post('/login', { email, password });
 
