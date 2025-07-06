@@ -61,6 +61,23 @@ pipeline {
         //         }
         //     }
         // }
+        stage('Start Docker') {
+            steps {
+                script {
+                    bat 'sudo systemctl start docker'
+                }
+            }
+        }
+        stage('Verify Docker') {
+            steps {
+                bat 'docker info'
+            }
+        }
+        stage('Build with Docker') {
+            steps {
+                bat 'docker build -t my-app .'
+            }
+        }
         stage('Deploy to QA on Docker'){
             steps{
                 bat "docker-compose up -d --build"
