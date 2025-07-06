@@ -54,25 +54,14 @@ pipeline {
                 bat "sc start Tomcat11-DEV"
             }
         }
-        // stage('Approve for QA'){
-        //     steps{
-        //         script{
-        //             input message:'Approve build to QA?'
-        //         }
-        //     }
-        // }
-        stage('Start Docker') {
-            steps {
-                script {
-                    bat 'docker desktop start'
+        stage('Approve for QA'){
+            steps{
+                script{
+                    input message:'Approve build to QA?'
                 }
             }
         }
-        stage('Verify Docker') {
-            steps {
-                bat 'docker info'
-            }
-        }
+
         stage('Deploy to QA on Docker'){
             steps{
                 bat "docker-compose up -d --build"
