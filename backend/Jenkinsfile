@@ -64,7 +64,7 @@ pipeline {
         stage('Start Docker') {
             steps {
                 script {
-                    bat 'net start com.docker.service'
+                    bat 'docker desktop start'
                 }
             }
         }
