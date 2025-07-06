@@ -1,20 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import api from "../../../api";
+import { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import api from "@/app/utils/api";
 
 export default function LoginPage() {
+	const { login } = useContext(AuthContext);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
-    if (email && password) {
-      const response = await api.post("auth/login", { email, password });
-      console.log(response);
+		if (email && password) {
+			const response = await api.post("auth/login", { email, password });
+			if (response.status === 200) {
+				// console.log(response.data)
+				login(response.data);
+			}
 		} else {
 			alert("Please fill all your details!");
 		}
-  };
+	};
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
 			<div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">

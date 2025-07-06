@@ -1,22 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import api from "../../../api";
+import api from "@/app/utils/api";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [name, setName] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const router = useRouter();
 	const handleSignup = async (e: React.FormEvent) => {
 		e.preventDefault();
-        if (confirmPassword && password === confirmPassword) {
-            const response=await api.post('/login', { email, password });
-
-        } else {
-            alert("Password did not match!");
-        }
-    };
+		if (confirmPassword && password === confirmPassword) {
+			const response = await api.post("auth/signup", { name, email, password });
+			if (response.status === 201) {
+				router.push("/login");
+			}
+		} else {
+			alert("Password did not match!");
+		}
+	};
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
 			<div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">

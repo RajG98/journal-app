@@ -17,7 +17,7 @@ public class LogsController {
 
     @GetMapping("/logs")
     public ResponseEntity<?> getLogs(){
-
+        
         return ResponseEntity.ok( service.getLogs());
     }
 }
