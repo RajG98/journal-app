@@ -64,7 +64,7 @@ pipeline {
         stage('Start Docker') {
             steps {
                 script {
-                    bat 'sudo systemctl start docker'
+                    bat 'net start docker'
                 }
             }
         }
