@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@/app/utils/api"; // your axios instance
+import api from "@/src/app/utils/api"; // your axios instance
 
 interface Log {
 	id: string;

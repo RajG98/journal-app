@@ -1,11 +1,13 @@
 "use client";
 
 import { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import api from "@/app/utils/api";
+import { AuthContext } from "@/src/app/context/AuthContext";
+import api from "@/src/app/utils/api";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
 	const { login } = useContext(AuthContext);
+	const router = useRouter();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const handleLogin = async (e: React.FormEvent) => {
@@ -13,8 +15,9 @@ export default function LoginPage() {
 		if (email && password) {
 			const response = await api.post("auth/login", { email, password });
 			if (response.status === 200) {
-				// console.log(response.data)
+				console.log(response.data)
 				login(response.data);
+				router.push('/dashboard');
 			}
 		} else {
 			alert("Please fill all your details!");

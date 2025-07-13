@@ -40,9 +40,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/**")
                         .authenticated()
                         .anyRequest().permitAll())
-                .formLogin(login->login
-                        .loginPage("/login")
-                        .permitAll())
+
                 .headers(headers -> headers
                         .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Allow H2 Console in same origin frame
                 )

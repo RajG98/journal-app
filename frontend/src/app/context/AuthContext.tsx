@@ -1,8 +1,7 @@
-"use client"; 
+"use client";
 
 import React, { createContext, useState, useEffect, ReactNode } from "react";
-
-
+import { deleteCookies, setCookies } from "./actions";
 
 interface AuthContextType {
 	jwtToken: string | null;
@@ -20,8 +19,11 @@ interface AuthProviderProps {
 	children: ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> =  ({
+	children,
+}) => {
 	const [jwtToken, setJwtToken] = useState<string | null>(null);
+	
 
 	useEffect(() => {
 		const storedUser = sessionStorage.getItem("jwt-token");
@@ -30,14 +32,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 		}
 	}, []);
 
-	const login = (token: string) => {
+	const login = async (token: string) => {
 		setJwtToken(token);
 		sessionStorage.setItem("jwt-token", token);
+		await setCookies("jwt-token",token);
 	};
 
-	const logout = () => {
+	const logout = async () => {
 		setJwtToken(null);
 		sessionStorage.removeItem("jwt-token");
+		await deleteCookies("jwt-token");
 	};
 
 	return (

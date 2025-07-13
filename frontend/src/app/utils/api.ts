@@ -1,7 +1,4 @@
 const { default: axios } = require("axios");
-import { AuthContext } from "@/app/context/AuthContext";
-import Cookies from "js-cookie";
-import { useContext } from "react";
 
 const api = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080",
@@ -11,20 +8,25 @@ const api = axios.create({
 	withCredentials: true,
 });
 
+api.interceptors.request.use((config: { headers: { [x: string]: any } }) => {
+	const jwtToken = sessionStorage.getItem("jwt-token");
+	if (jwtToken) {
+		config.headers["Authorization"] = `Bearer ${jwtToken}`;
+	}
+	return config;
+});
 
-api.interceptors.request.use((config: { headers: { [x: string]: any; }; }) => {
-    const jwtToken  = sessionStorage.getItem("jwt-token");
-    if (jwtToken) {
-        config.headers["Authorization"] = `Bearer ${jwtToken}`;
-    }
-    return config;
-})
-
-api.interceptors.response.use((response: any) => response, (error: any) => {
-    if (error.response && error.response.status === 401) {
-        window.location.href = "/login?expired=true";
-    }
-    return Promise.reject(error);
-})
+api.interceptors.response.use(
+	(response: any) => response,
+	(error: any) => {
+		if (
+			error.response &&
+			(error.response.status === 401 || error.response.status === 403)
+		) {
+			window.location.href = "/login?expired=true";
+		}
+		return Promise.reject(error);
+	}
+);
 
 export default api;
