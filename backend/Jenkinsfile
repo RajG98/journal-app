@@ -57,7 +57,7 @@ pipeline {
         stage('Approve for QA'){
             steps{
                 script{
-                    input message:'Approve build to QA?'
+                    input message:'Approve build to QA?-(Start Docker Desktop before proceeding)'
                 }
             }
         }
