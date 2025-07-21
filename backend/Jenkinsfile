@@ -36,7 +36,9 @@ pipeline {
         stage('SonarQube Analysis'){
             steps{
                 withSonarQubeEnv(installationName: 'sq1') {
-                    bat 'mvn sonar:sonar'
+                    dir('backend'){
+                        bat 'mvn sonar:sonar'
+                    }
                 }
             }
         }
