@@ -41,7 +41,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('backend'){
-                    bat "mvn package -DskipTests"
+                    bat "mvn clean package "
                 }
             }
         }
