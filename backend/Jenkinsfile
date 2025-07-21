@@ -30,18 +30,18 @@ pipeline {
                     bat "mvn clean test"
                 }
             }
-//             post{
-//                 always{
-//                     dir('backend'){
-//                         junit '**/target/surefire-reports/TEST-*.xml'
-//                     }
-//                 }
-//             }
+            post{
+                always{
+                    dir('backend'){
+                        junit '**/target/surefire-reports/TEST-*.xml'
+                    }
+                }
+            }
         }
         stage('Build') {
             steps {
                 dir('backend'){
-                    bat "mvn clean package "
+                    bat "mvn package -DskipTests"
                 }
             }
         }
