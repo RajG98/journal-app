@@ -42,6 +42,13 @@ pipeline {
                 }
             }
         }
+        stage('Quality Gate'){
+            steps{
+                timeOut(time:2,unit:'MINUTES'){
+                    waitForQualityGate abortPipeline:true
+                }
+            }
+        }
         stage('Copy to DEV') {
             steps {
                 dir('backend'){
