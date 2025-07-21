@@ -32,14 +32,16 @@ pipeline {
             }
             post{
                 always{
-                    junit '**/target/surefire-reports/TEST-*.xml'
+                    dir('backend'){
+                        junit '**/target/surefire-reports/TEST-*.xml'
+                    }
                 }
             }
         }
         stage('Build') {
             steps {
                 dir('backend'){
-                    bat "mvn install -DskipTests"
+                    bat "mvn package"
                 }
             }
         }
