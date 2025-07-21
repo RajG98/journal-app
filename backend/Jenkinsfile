@@ -29,8 +29,15 @@ pipeline {
                 dir('backend'){
                     bat "mvn clean package"
                 }
-                
 
+
+            }
+        }
+        stage('SonarQube Analysis'){
+            steps{
+                withSonarQubeEnv(installationName: 'sq1') {
+                    bat 'mvn sonar:sonar'
+                }
             }
         }
         stage('Copy to DEV') {

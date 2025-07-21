@@ -1,16 +1,16 @@
 package com.developer.journal.configs;
 
 import com.developer.journal.services.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,30 +26,27 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception{
         return http
                 .cors(cors->cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf-> csrf
-                        .disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests-> requests
                         .requestMatchers("/api/**")
                         .authenticated()
                         .anyRequest().permitAll())
 
                 .headers(headers -> headers
-                        .frameOptions(frameOptions -> frameOptions.sameOrigin()) // Allow H2 Console in same origin frame
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin) // Allow H2 Console in same origin frame
                 )
                 .sessionManagement(config-> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsServiceImpl userDetailsService){
         DaoAuthenticationProvider authProvider= new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
