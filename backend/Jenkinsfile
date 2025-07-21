@@ -24,13 +24,23 @@ pipeline {
                 
             }
         }
+        stage('Test') {
+            steps {
+                dir('backend'){
+                    bat "mvn clean test"
+                }
+            }
+            post{
+                always{
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+        }
         stage('Build') {
             steps {
                 dir('backend'){
-                    bat "mvn clean package"
+                    bat "mvn install -DskipTests"
                 }
-
-
             }
         }
         stage('SonarQube Analysis'){

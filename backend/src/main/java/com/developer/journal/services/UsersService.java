@@ -2,7 +2,6 @@ package com.developer.journal.services;
 
 import com.developer.journal.models.Users;
 import com.developer.journal.repositories.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 public class UsersService {
 
-    @Autowired
     private UsersRepository usersRepository;
+    public UsersService(UsersRepository usersRepository){
+        this.usersRepository=usersRepository;
+    }
 
     public Users registerUser(Users user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
