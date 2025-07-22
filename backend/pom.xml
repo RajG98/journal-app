@@ -45,8 +45,6 @@
 		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
 
-		<sonar.token>squ_902a778bbe6b38c3a6aebb0c7a79a4b8f4b6a200</sonar.token>
-
 	</properties>
 	<dependencies>
 		<dependency>
