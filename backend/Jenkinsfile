@@ -8,8 +8,8 @@ pipeline {
         JWT_SECRET_KEY=credentials('jwt-secret-key-1')
         JWT_EXP_TIME=300000
         POSTGRES_CREDENTIALS=credentials('postgres')
-        POSTGRES_USERNAME=${POSTGRES_CREDENTIALS_USR}
-        POSTGRES_PASSWORD=${POSTGRES_CREDENTIALS_PSW}
+        POSTGRES_USERNAME="${POSTGRES_CREDENTIALS_USR}"
+        POSTGRES_PASSWORD="${POSTGRES_CREDENTIALS_PSW}"
 
     }
     parameters {
