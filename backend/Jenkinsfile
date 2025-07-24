@@ -6,7 +6,6 @@ pipeline {
         TARGET_DIR_FOR_QA='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-QA\\webapps'
         WAR_NAME='journal.war'
         JWT_SECRET_KEY=credentials('jwt-secret-key-1')
-        JWT_EXP_TIME=300000
         POSTGRES_CREDENTIALS=credentials('postgres')
         POSTGRES_USERNAME="${POSTGRES_CREDENTIALS_USR}"
         POSTGRES_PASSWORD="${POSTGRES_CREDENTIALS_PSW}"
@@ -67,13 +66,6 @@ pipeline {
                 }
             }
         }
-        stage('Copy to DEV') {
-            steps {
-                dir('backend'){
-                    bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
-                }
-            }
-        }
         stage('Stop Tomcat'){
             steps{
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
@@ -82,6 +74,22 @@ pipeline {
                 }
             }
         }
+        stage('Copy to DEV') {
+            steps {
+                dir('backend'){
+                    bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}"
+                }
+            }
+        }
+        stage('Prepare Tomcat Env') {
+            steps {
+               bat """
+echo set CATALINA_OPTS=-Dsecurity.jwt.secret-key=%JWT_SECRET_KEY% > %TARGET_DIR_FOR_DEV%\\bin\\setenv.bat
+"""
+
+            }
+        }
+
         stage('Start Tomcat') {
             steps {
                 
