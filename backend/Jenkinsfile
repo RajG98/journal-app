@@ -70,7 +70,7 @@ pipeline {
             steps{
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
                     bat "sc stop Tomcat11-DEV"
-                    bat 'waitfor SomethingThatIsNeverHappening /t 10 2>NUL'
+                    bat 'timeout /t 10 /nobreak >nul'
                 }
             }
         }
@@ -83,9 +83,14 @@ pipeline {
         }
         stage('Prepare Tomcat Env') {
             steps {
-               bat """
-echo set CATALINA_OPTS=-Dsecurity.jwt.secret-key=%JWT_SECRET_KEY% > %TARGET_DIR_FOR_DEV%\\bin\\setenv.bat
+               
+bat """
+(
+echo set CATALINA_OPTS=-Dspring.profiles.active=dev ^
+ -DJWT_SECRET_KEY=%JWT_SECRET_KEY%
+) > %TARGET_DIR_FOR_DEV%\\bin\\setenv.bat
 """
+
 
             }
         }
