@@ -46,7 +46,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('backend'){
-                    bat "mvn package -DskipTests"
+                    bat "mvn package -DskipTests -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY%"
                 }
             }
         }
