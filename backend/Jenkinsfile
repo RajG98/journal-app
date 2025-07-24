@@ -32,7 +32,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('backend'){
-                    bat "mvn clean test"
+                    bat "mvn clean test -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY%"
                 }
             }
             post{
