@@ -3,12 +3,12 @@ pipeline {
     
     environment{
         TARGET_DIR_FOR_DEV='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-DEV'
-        TARGET_DIR_FOR_QA='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-QA\\webapps'
+        TARGET_DIR_FOR_QA='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-QA'
         WAR_NAME='journal.war'
         JWT_SECRET_KEY=credentials('jwt-secret-key-1')
         POSTGRES_CREDENTIALS=credentials('postgres')
-        postgres.username="${POSTGRES_CREDENTIALS_USR}"
-        postgres.password="${POSTGRES_CREDENTIALS_PSW}"
+        POSTGRES_USERNAME="${POSTGRES_CREDENTIALS_USR}"
+        POSTGRES_PASSWORD="${POSTGRES_CREDENTIALS_PSW}"
 
     }
     parameters {
@@ -77,7 +77,7 @@ pipeline {
         stage('Copy to DEV') {
             steps {
                 dir('backend'){
-                    bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}\\webapps"
+                    bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_QA}\\webapps"
                 }
             }
         }
@@ -88,8 +88,8 @@ bat """
 (
 echo set JAVA_OPTS=-Dspring.profiles.active=qa ^
  -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY% ^
- -Dpostgres.username=postgres ^
- -Dpostgres.password=toor 
+ -Dpostgres.username=%POSTGRES_USERNAME% ^
+ -Dpostgres.password=%POSTGRES_PASSWORD% 
 ) > "%TARGET_DIR_FOR_DEV%\\bin\\setenv.bat"
 """
 
