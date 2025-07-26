@@ -5,6 +5,7 @@ services:
     build:
       context: ./backend
     environment:
-      - JAVA_OPTS=-Xms512m -Xmx1024m -Dspring.profiles.active=qa
+      - JAVA_OPTS=-Xms512m -Xmx1024m -Dspring.profiles.active=qa -DPOSTGRES_USERNAME=postgres \
+        -DPOSTGRES_PASSWORD=toor
     ports:
       - "8083:8080"
