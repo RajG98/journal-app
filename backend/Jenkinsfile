@@ -86,7 +86,9 @@ pipeline {
                
 bat """
 (
-echo set JAVA_OPTS=-Dspring.profiles.active=dev ^
+echo off
+set JWT_SECRET_KEY=${JWT_SECRET_KEY}
+set JAVA_OPTS=-Dspring.profiles.active=dev ^
  -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY% ^
  -Dpostgres.username=%POSTGRES_USERNAME% ^
  -Dpostgres.password=%POSTGRES_PASSWORD% 
