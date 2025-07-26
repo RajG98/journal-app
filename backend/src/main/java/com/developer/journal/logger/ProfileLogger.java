@@ -14,11 +14,15 @@ public class ProfileLogger implements CommandLineRunner {
     private String profile;
 
 
-    @Value("${security.jwt.secret-key:null}")
-    private String key;
-
+//    @Value("${security.jwt.secret-key}")
+//    private String key;
+//
+//    @Override
+//    public void run(String... args) {
+//        log.info("ACTIVE SPRING PROFILE: {} with jwt key: {}", profile,key);
+//    }
     @Override
     public void run(String... args) {
-        log.info("ACTIVE SPRING PROFILE: {} with jwt key: {}", profile,key);
+        log.info("ACTIVE SPRING PROFILE: {}", profile);
     }
 }
