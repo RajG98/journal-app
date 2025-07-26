@@ -87,7 +87,7 @@ pipeline {
                 def setenvContent = """
                 @echo off
                 set JWT_SECRET_KEY=${JWT_SECRET_KEY}
-                set JAVA_OPTS=%JAVA_OPTS% -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY%
+                set JAVA_OPTS=%JAVA_OPTS% -DJWT_SECRET_KEY=%JWT_SECRET_KEY%
                 """
 
                 writeFile file: "${TARGET_DIR_FOR_DEV}\\bin\\setenv.bat", text: setenvContent
