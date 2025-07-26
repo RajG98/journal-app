@@ -89,7 +89,7 @@ bat """
 echo off
 set JWT_SECRET_KEY=${JWT_SECRET_KEY}
 set JAVA_OPTS=-Dspring.profiles.active=dev ^
- -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY% ^
+ -Djwt.secret=%JWT_SECRET_KEY% ^
  -Dpostgres.username=%POSTGRES_USERNAME% ^
  -Dpostgres.password=%POSTGRES_PASSWORD% 
 ) > "%TARGET_DIR_FOR_DEV%\\bin\\setenv.bat"
