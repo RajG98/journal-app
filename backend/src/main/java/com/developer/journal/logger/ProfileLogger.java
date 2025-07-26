@@ -14,7 +14,7 @@ public class ProfileLogger implements CommandLineRunner {
     private String profile;
 
 
-    @Value("${security.jwt.secret-key}")
+    @Value("${security.jwt.secret-key:null}")
     private String key;
 
     @Override
