@@ -77,7 +77,7 @@ pipeline {
         stage('Copy to DEV') {
             steps {
                 dir('backend'){
-                    bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_QA}\\webapps"
+                    bat "xcopy /Y target\\${WAR_NAME} ${TARGET_DIR_FOR_DEV}\\webapps"
                 }
             }
         }
@@ -86,7 +86,7 @@ pipeline {
                
 bat """
 (
-echo set JAVA_OPTS=-Dspring.profiles.active=qa ^
+echo set JAVA_OPTS=-Dspring.profiles.active=dev ^
  -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY% ^
  -Dpostgres.username=%POSTGRES_USERNAME% ^
  -Dpostgres.password=%POSTGRES_PASSWORD% 
