@@ -5,6 +5,6 @@ services:
     build:
       context: ./backend
     environment:
-      - JAVA_OPTS=-Xms512m -Xmx1024m -Dspring.profiles.active=qa -DPOSTGRES_URL=jdbc:postgresql://host.docker.internal:5432/journal -DPOSTGRES_USERNAME=postgres -DPOSTGRES_PASSWORD=toor
+      - JAVA_OPTS=-Xms512m -Xmx1024m -Dspring.profiles.active=qa -DJWT_SECRET_KEY=54f3718016eacb49528a50e2971ea976c38c7dbe29cc8d0eb4373e869403f3cf -DPOSTGRES_URL=jdbc:postgresql://host.docker.internal:5432/journal -DPOSTGRES_USERNAME=postgres -DPOSTGRES_PASSWORD=toor
     ports:
       - "8083:8080"
