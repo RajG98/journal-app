@@ -83,17 +83,17 @@ pipeline {
         }
         stage('Prepare Tomcat Env') {
             steps {
-               
-bat """
-(
-echo set JAVA_OPTS=-Dspring.profiles.active=dev ^
- -Djwt.secret=%JWT_SECRET_KEY% ^
- -Dpostgres.username=%POSTGRES_USERNAME% ^
- -Dpostgres.password=%POSTGRES_PASSWORD% 
-) > "%TARGET_DIR_FOR_DEV%\\bin\\setenv.bat"
-"""
+               script {
+                def setenvContent = """
+                @echo off
+                set JWT_SECRET_KEY=${JWT_SECRET_KEY}
+                set JAVA_OPTS=%JAVA_OPTS% -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY%
+                """
 
+                writeFile file: "${TARGET_DIR_FOR_DEV}\\bin\\setenv.bat", text: setenvContent
+                echo "✅ Generated setenv.bat"
 
+               }
             }
         }
 
