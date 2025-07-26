@@ -86,7 +86,7 @@ pipeline {
                
 bat """
 (
-echo set CATALINA_OPTS=-Dspring.profiles.active=dev ^
+echo set JAVA_OPTS=-Dspring.profiles.active=dev ^
  -DJWT_SECRET_KEY=%JWT_SECRET_KEY%
 ) > %TARGET_DIR_FOR_DEV%\\bin\\setenv.bat
 """
@@ -117,7 +117,7 @@ echo set CATALINA_OPTS=-Dspring.profiles.active=dev ^
         stage('Wait and Test') {
         steps {
             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
-            bat 'waitfor SomethingThatIsNeverHappening /t 10 2>NUL'
+            bat 'timeout /t 10 /nobreak >nul'
             bat 'curl -f http://localhost:8080 || echo "App did not start properly"'
             }
         }
