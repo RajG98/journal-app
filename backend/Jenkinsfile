@@ -86,9 +86,11 @@ pipeline {
                
 bat """
 (
-echo set JAVA_OPTS=-Dspring.profiles.active=dev ^
- -DJWT_SECRET_KEY=%JWT_SECRET_KEY%
-) > %TARGET_DIR_FOR_DEV%\\bin\\setenv.bat
+echo set JAVA_OPTS=-Dspring.profiles.active=qa ^
+ -Dsecurity.jwt.secret-key=%JWT_SECRET_KEY% ^
+ -DPOSTGRES_USERNAME=postgres ^
+ -DPOSTGRES_PASSWORD=toor 
+) > "%TARGET_DIR_FOR_DEV%\\bin\\setenv.bat"
 """
 
 
