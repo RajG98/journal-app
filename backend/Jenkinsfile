@@ -120,7 +120,7 @@ pipeline {
         steps {
             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){ 
             bat 'timeout /t 10 /nobreak >nul'
-            bat 'curl -f http://localhost:8080 || echo "App did not start properly"'
+            bat 'curl -f http://localhost:8083 || echo "App did not start properly"'
             }
         }
     }
