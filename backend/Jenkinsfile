@@ -7,8 +7,7 @@ pipeline {
         WAR_NAME='journal.war'
         JWT_SECRET_KEY=credentials('jwt-secret-key-1')
         POSTGRES_CREDENTIALS=credentials('postgres')
-        POSTGRES_USERNAME="${POSTGRES_CREDENTIALS_USR}"
-        POSTGRES_PASSWORD="${POSTGRES_CREDENTIALS_PSW}"
+
 
     }
     parameters {
@@ -113,7 +112,13 @@ pipeline {
 
         stage('Deploy to QA on Docker'){
             steps{
-                bat "docker-compose up -d --build"
+                bat'''
+                JWT_SECRET_KEY=${JWT_SECRET_KEY} \
+                POSTGRES_URL=jdbc:postgresql://localhost:5432/db \
+                POSTGRES_USERNAME="${POSTGRES_CREDENTIALS_USR}" \
+                POSTGRES_PASSWORD="${POSTGRES_CREDENTIALS_PSW}" \
+                docker-compose -f docker-compose.yml up -d --build
+                '''
             }
         }
         stage('Wait and Test') {
