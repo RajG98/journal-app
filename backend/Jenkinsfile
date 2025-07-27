@@ -45,7 +45,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('backend') {
-                    sh 'mvn package -DskipTests -Dsecurity.jwt.secret-key=$JWT_SECRET_KEY'
+                    sh './mvnw package -DskipTests -Dsecurity.jwt.secret-key=$JWT_SECRET_KEY'
                 }
             }
         }
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sq1') {
                     dir('backend') {
-                        sh 'mvn sonar:sonar'
+                        sh './mvnw sonar:sonar'
                     }
                 }
             }
