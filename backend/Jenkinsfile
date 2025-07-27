@@ -30,7 +30,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('backend') {
-                    sh '.\\mvnw clean test -Dsecurity.jwt.secret-key=$JWT_SECRET_KEY'
+                    sh './mvnw clean test -Dsecurity.jwt.secret-key=$JWT_SECRET_KEY'
                 }
             }
             post {
