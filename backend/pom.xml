@@ -31,8 +31,7 @@
 	<properties>
 		<java.version>17</java.version>
 
-		<sonar.host.url>http://localhost:9000</sonar.host.url>
-		<sonar.organization>your-organization</sonar.organization>
+
 		<sonar.projectKey>com.developer:journal</sonar.projectKey>
 		<sonar.projectName>Journal</sonar.projectName>
 		<sonar.projectVersion>1.0</sonar.projectVersion>
