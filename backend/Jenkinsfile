@@ -51,24 +51,12 @@ pipeline {
                 }
             }
         }
-        stage('Ping SonarQube') {
-            steps {
-                script {
-                    def response = sh(script: "curl --silent --fail ${SONAR_HOST_URL}", returnStatus: true)
-                    if (response != 0) {
-                        error "❌ SonarQube server at ${SONAR_HOST_URL} is not reachable"
-                    } else {
-                        echo "✅ SonarQube server is reachable"
-                    }
-                }
-            }
-        }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sq1') {
                     dir('backend') {
-                        sh './mvnw sonar:sonar -Dsonar.host.url=${SONAR_HOST_URL}'
+                        sh './mvnw sonar:sonar '
                     }
                 }
             }
