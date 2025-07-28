@@ -7,7 +7,7 @@ pipeline {
         WAR_NAME='journal.war'
         JWT_SECRET_KEY = credentials('jwt-secret-key-1')
         POSTGRES_CREDENTIALS = credentials('postgres')
-        SONAR_HOST_URL='http://host.docker.internal:9000'
+        SONAR_HOST_URL='http://sonarqube:9000'
     }
 
     parameters {
@@ -56,7 +56,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sq1') {
                     dir('backend') {
-                        sh './mvnw sonar:sonar '
+                        sh './mvnw sonar:sonar -Dsonar.host.url=${SONAR_HOST_URL}'
                     }
                 }
             }
