@@ -2,11 +2,12 @@ pipeline {
     agent { label 'slave1' }  // Make sure this matches your Linux node label
 
     environment {
-        TARGET_DIR_FOR_DEV='/opt/tomcat/Tomcat11-DEV'
+        TARGET_DIR_FOR_DEV='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-DEV'
         TARGET_DIR_FOR_QA='/opt/tomcat/Tomcat11-QA'
         WAR_NAME='journal.war'
         JWT_SECRET_KEY = credentials('jwt-secret-key-1')
         POSTGRES_CREDENTIALS = credentials('postgres')
+        SONAR_HOST_URL='http://host.docker.internal:9000'
     }
 
     parameters {
@@ -31,7 +32,7 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'chmod +x mvnw'
-                    sh './mvnw clean test -Dsecurity.jwt.secret-key=$JWT_SECRET_KEY'
+                    sh './mvnw clean test'
                 }
             }
             post {
@@ -46,66 +47,66 @@ pipeline {
         stage('Build') {
             steps {
                 dir('backend') {
-                    sh './mvnw package -DskipTests -Dsecurity.jwt.secret-key=$JWT_SECRET_KEY'
+                    sh './mvnw package -DskipTests'
                 }
             }
         }
 
-        // stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sq1') {
+                    dir('backend') {
+                        sh './mvnw sonar:sonar -Dsonar.host.url=$SONAR_HOST_URL'
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        // stage('Stop Tomcat') {
         //     steps {
-        //         withSonarQubeEnv('sq1') {
-        //             dir('backend') {
-        //                 sh './mvnw sonar:sonar'
-        //             }
+        //         catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+        //             sh 'sudo systemctl stop tomcat11-dev || true'
+        //             sh 'sleep 10'
         //         }
         //     }
         // }
 
-        // stage('Quality Gate') {
+        // stage('Copy to DEV') {
         //     steps {
-        //         timeout(time: 2, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true
+        //         dir('backend') {
+        //             sh "cp target/${WAR_NAME} ${TARGET_DIR_FOR_DEV}/webapps/"
         //         }
         //     }
         // }
 
-        stage('Stop Tomcat') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    sh 'sudo systemctl stop tomcat11-dev || true'
-                    sh 'sleep 10'
-                }
-            }
-        }
+        // stage('Prepare Tomcat Env') {
+        //     steps {
+        //         script {
+        //             def setenvContent = """
+        //             export JWT_SECRET_KEY=${JWT_SECRET_KEY}
+        //             export JAVA_OPTS="\$JAVA_OPTS -DJWT_SECRET_KEY=\$JWT_SECRET_KEY"
+        //             """
 
-        stage('Copy to DEV') {
-            steps {
-                dir('backend') {
-                    sh "cp target/${WAR_NAME} ${TARGET_DIR_FOR_DEV}/webapps/"
-                }
-            }
-        }
+        //             writeFile file: "${TARGET_DIR_FOR_DEV}/bin/setenv.sh", text: setenvContent
+        //             sh "chmod +x ${TARGET_DIR_FOR_DEV}/bin/setenv.sh"
+        //             echo "✅ Generated setenv.sh"
+        //         }
+        //     }
+        // }
 
-        stage('Prepare Tomcat Env') {
-            steps {
-                script {
-                    def setenvContent = """
-                    export JWT_SECRET_KEY=${JWT_SECRET_KEY}
-                    export JAVA_OPTS="\$JAVA_OPTS -DJWT_SECRET_KEY=\$JWT_SECRET_KEY"
-                    """
-
-                    writeFile file: "${TARGET_DIR_FOR_DEV}/bin/setenv.sh", text: setenvContent
-                    sh "chmod +x ${TARGET_DIR_FOR_DEV}/bin/setenv.sh"
-                    echo "✅ Generated setenv.sh"
-                }
-            }
-        }
-
-        stage('Start Tomcat') {
-            steps {
-                sh 'sudo systemctl start tomcat11-dev'
-            }
-        }
+        // stage('Start Tomcat') {
+        //     steps {
+        //         sh 'sudo systemctl start tomcat11-dev'
+        //     }
+        // }
 
         stage('Approve for QA') {
             steps {
