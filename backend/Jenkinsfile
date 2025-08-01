@@ -56,7 +56,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sq1') {
                     dir('backend') {
-                        sh './mvnw sonar:sonar -Dsonar.host.url=http://localhost:9000'
+                        sh './mvnw sonar:sonar'
                     }
                 }
             }
