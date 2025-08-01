@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'slave1' }  // Make sure this matches your Linux node label
+    agent any // Make sure this matches your Linux node label
 
     environment {
         TARGET_DIR_FOR_DEV='C:\\apache-tomcat-11.0.8-windows-x64\\Tomcat11-DEV'
